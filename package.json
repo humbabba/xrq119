@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx @tailwindcss/cli -i assets/css/app.css -o dist/app.css --watch",
-    "build": "npx @tailwindcss/cli -i assets/css/app.css -o dist/app.css --minify"
+    "dev:css": "npx @tailwindcss/cli -i assets/css/app.css -o dist/app.css --watch",
+    "dev:blocks": "wp-scripts start",
+    "build": "wp-scripts build && npx @tailwindcss/cli -i assets/css/app.css -o dist/app.css --minify"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@tailwindcss/cli": "^4.2.1",
+    "@wordpress/scripts": "^31.6.0",
     "tailwindcss": "^4.2.1"
   }
 }

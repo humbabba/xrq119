@@ -2,6 +2,7 @@
 
 @source "../../*.php";
 @source "../../home-blocks.html";
+@source "../../src/**/*.js";
 
 /* ── Custom fonts ── */
 
@@ -124,6 +125,18 @@
     background: #06b6d4;
     border-radius: 50%;
     border: 3px solid #f9fafb;
+}
+
+.timeline-item li {
+    position: relative;
+    padding-left: 1.25rem;
+}
+
+.timeline-item li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #06b6d4;
 }
 
 /* ── Cursor blink ── */
