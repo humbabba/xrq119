@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output (regenerated via npm run build)
+#dist/
+
+.claude/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+npm-debug.log*
+
+# Reference file (not part of theme)
+home-blocks.html

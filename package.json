@@ -1,0 +1,17 @@
+{
+  "name": "xrq119",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx @tailwindcss/cli -i assets/css/app.css -o dist/app.css --watch",
+    "build": "npx @tailwindcss/cli -i assets/css/app.css -o dist/app.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.1",
+    "tailwindcss": "^4.2.1"
+  }
+}
