@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:css": "npx @tailwindcss/cli -i assets/css/app.css -o dist/app.css --watch",
+    "dev": "npx @tailwindcss/cli -i assets/css/app.css -o dist/app.css --watch",
     "dev:blocks": "wp-scripts start",
     "build": "wp-scripts build && npx @tailwindcss/cli -i assets/css/app.css -o dist/app.css --minify"
   },

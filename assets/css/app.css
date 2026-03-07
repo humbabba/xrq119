@@ -4,6 +4,12 @@
 @source "../../home-blocks.html";
 @source "../../src/**/*.js";
 
+/* ── Smooth scroll ── */
+
+html {
+    scroll-behavior: smooth;
+}
+
 /* ── Custom fonts ── */
 
 @theme {
@@ -137,6 +143,106 @@
     position: absolute;
     left: 0;
     color: #06b6d4;
+}
+
+/* ── Buttons ── */
+
+.wp-block-button__link.wp-element-button {
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
+}
+
+/* Filled button */
+.wp-block-button:not(.is-style-outline) .wp-block-button__link {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+    color: #f9fafb;
+    border: 1px solid transparent;
+}
+
+.wp-block-button:not(.is-style-outline) .wp-block-button__link:hover {
+    background: linear-gradient(135deg, #22d3ee, #06b6d4);
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.5), 0 0 24px rgba(6, 182, 212, 0.2);
+    transform: translateY(-1px);
+}
+
+.wp-block-button:not(.is-style-outline) .wp-block-button__link:active {
+    transform: translateY(0);
+    box-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+}
+
+/* Outline button */
+.wp-block-button.is-style-outline .wp-block-button__link {
+    background: transparent;
+    color: #06b6d4;
+    border: 1.5px solid #06b6d4;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.15);
+}
+
+.wp-block-button.is-style-outline .wp-block-button__link:hover {
+    background: rgba(6, 182, 212, 0.1);
+    border-color: #22d3ee;
+    color: #22d3ee;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.35), inset 0 0 12px rgba(6, 182, 212, 0.1);
+    transform: translateY(-1px);
+}
+
+.wp-block-button.is-style-outline .wp-block-button__link:active {
+    transform: translateY(0);
+    box-shadow: 0 0 6px rgba(6, 182, 212, 0.2);
+}
+
+/* ── Section divider accent ── */
+
+.wp-block-group + .wp-block-group {
+    position: relative;
+}
+
+.wp-block-group + .wp-block-group::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #06b6d4, #a855f7, #06b6d4, transparent);
+    opacity: 0.6;
+}
+
+/* ── Footer accent bar ── */
+
+footer {
+    position: relative;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 10%, #06b6d4 30%, #a855f7 50%, #06b6d4 70%, transparent 90%);
+}
+
+/* ── Skill tags hover ── */
+
+.wp-block-xrq119-skill-group .flex span {
+    transition: all 0.3s ease;
+}
+
+.wp-block-xrq119-skill-group .flex span:hover {
+    background: #06b6d4;
+    color: #fff;
+    border-color: #06b6d4;
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+    transform: translateY(-1px);
 }
 
 /* ── Cursor blink ── */
