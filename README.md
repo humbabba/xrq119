@@ -1,6 +1,6 @@
 # xrq119
 
-A sci-fi-styled WordPress portfolio theme built with Tailwind CSS v4 and the WordPress block editor.
+A mildly sci-fi-styled WordPress theme built with Tailwind CSS v4 and the WordPress block editor.
 
 Cyan accents, corner brackets, scanline overlays, grid backgrounds, and glow effects give content a terminal/HUD aesthetic.
 
@@ -24,9 +24,8 @@ xrq119/
   functions.php        ← Theme setup, meta registration, block registration
   header.php
   footer.php
-  index.php            ← Post archive / portfolio grid
+  index.php            ← Post/category archive
   page.php             ← Single page (renders block content)
-  home-blocks.html     ← Reference markup for home page blocks
   style.css            ← WP theme header only
 ```
 
@@ -53,9 +52,9 @@ npm install
 
 ## Templates
 
-### `index.php` &mdash; Portfolio grid
+### `index.php` &mdash; Post archives
 
-Displays posts as project cards in a responsive grid (1/2/3 columns). Each card shows:
+Displays posts as  cards in a responsive grid (1/2/3 columns). Each card shows:
 
 - **Thumbnail** (or a fallback gradient with the year)
 - **Title**
@@ -78,7 +77,7 @@ Two custom panels appear in the post editor sidebar under the document settings.
 
 ### External Link
 
-Overrides where a post's card links to in the portfolio grid.
+Overrides where a post's card links to in the archive grid.
 
 | Field | Description |
 |---|---|
@@ -90,7 +89,7 @@ When enabled, the card's image and title link to this URL instead of the post pe
 
 ### Card Buttons
 
-Add one or more action buttons to a post's card in the portfolio grid. Click **+ Add Button** to create a new button.
+Add one or more action buttons to a post's card in the archive grid. Click **+ Add Button** to create a new button.
 
 Each button has:
 
@@ -177,8 +176,6 @@ Five blocks are registered under the `xrq119/` namespace and appear in the **xrq
 | `xrq119/skill-group` | Group of skill tags |
 | `xrq119/timeline-entry` | Timeline item with date and bullet points |
 | `xrq119/icon-card` | Card with a prominent icon |
-
-These are designed for the home page content. See `home-blocks.html` for reference markup.
 
 ---
 
