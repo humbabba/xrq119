@@ -3,3 +3,5 @@ import './blocks/stat-card';
 import './blocks/skill-group';
 import './blocks/timeline-entry';
 import './blocks/icon-card';
+import './external-link-panel';
+import './card-buttons-panel';
