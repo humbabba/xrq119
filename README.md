@@ -1,8 +1,8 @@
 # xrq119
 
-A mildly sci-fi-styled WordPress theme built with Tailwind CSS v4 and the WordPress block editor.
+A sci-fi-styled WordPress theme built with Tailwind CSS v4 and the WordPress block editor.
 
-Cyan accents, corner brackets, scanline overlays, grid backgrounds, and glow effects give content a terminal/HUD aesthetic.
+Dark HUD header and footer bars, cyan accents, corner brackets, scanline overlays, grid backgrounds, code rain animation, and glow effects give content a terminal/control-panel aesthetic.
 
 ---
 
@@ -11,22 +11,22 @@ Cyan accents, corner brackets, scanline overlays, grid backgrounds, and glow eff
 ```
 xrq119/
   assets/
-    css/app.css        ← Tailwind source (includes icon system + custom components)
-    fonts/             ← Inter + JetBrains Mono (self-hosted)
-  build/               ← Compiled block JS (generated)
+    css/app.css        <- Tailwind source (includes icon system + custom components)
+    fonts/             <- Inter + JetBrains Mono (self-hosted)
+  build/               <- Compiled block JS (generated)
   dist/
-    app.css            ← Compiled + minified CSS (generated)
+    app.css            <- Compiled + minified CSS (generated)
   src/
-    index.js           ← Block JS entry point
-    blocks/            ← Custom block definitions
+    index.js           <- Block JS entry point
+    blocks/            <- Custom block definitions
     external-link-panel.js
     card-buttons-panel.js
-  functions.php        ← Theme setup, meta registration, block registration
-  header.php
-  footer.php
-  index.php            ← Post/category archive
-  page.php             ← Single page (renders block content)
-  style.css            ← WP theme header only
+  functions.php        <- Theme setup, meta registration, block registration, Customizer
+  header.php           <- Sticky dark HUD header (logo, nav, screen area)
+  footer.php           <- Sticky dark HUD footer (status indicator, copyright)
+  index.php            <- Post/category archive (card grid)
+  page.php             <- Single page (renders block content)
+  style.css            <- WP theme header only
 ```
 
 ---
@@ -50,11 +50,42 @@ npm install
 
 ---
 
+## Header & Footer (HUD bars)
+
+The theme features sticky dark header and footer bars with a subtle scanline overlay and flicker animation.
+
+### Header
+
+The header contains three areas, left-aligned with the screen area pushed to the right:
+
+- **Logo** &mdash; displays the custom logo (Appearance > Customize > Site Identity) or the site name as fallback text
+- **Navigation** &mdash; by default, lists all categories (excluding Uncategorized) as links. If a custom menu is assigned to the **Header Navigation** location (Appearance > Menus), it replaces the category list entirely
+- **Screen area** &mdash; by default, shows a code rain (matrix-style) animation with a scanline effect. Can be replaced with custom HTML via the Customizer
+
+### Footer
+
+The footer contains three items in a row:
+
+- **Status indicator** &mdash; by default, a pulsing cyan dot with "sys.online" text. Can be replaced with custom HTML via the Customizer
+- **Copyright** &mdash; year + site name
+- **Theme ID** &mdash; "xrq119" (hidden on small screens)
+
+### Customizer settings
+
+Under **Appearance > Customize > HUD Bar Settings**:
+
+| Setting | Description |
+|---|---|
+| **Header Screen HTML** | Custom HTML that completely replaces the code rain screen. Leave empty for the default animation |
+| **Footer Status HTML** | Custom HTML that completely replaces the pulsing "sys.online" indicator. Leave empty for the default |
+
+---
+
 ## Templates
 
 ### `index.php` &mdash; Post archives
 
-Displays posts as  cards in a responsive grid (1/2/3 columns). Each card shows:
+Displays posts as cards in a responsive grid (1/2/3 columns). Each card shows:
 
 - **Thumbnail** (or a fallback gradient with the year)
 - **Title**
@@ -183,17 +214,32 @@ Five blocks are registered under the `xrq119/` namespace and appear in the **xrq
 
 Custom CSS classes available for use in block markup or templates:
 
-| Class | Effect                                                    |
-|---|-----------------------------------------------------------|
+| Class | Effect |
+|---|---|
 | `corner-accent` | Cyan bracket accents on top-left and bottom-right corners |
-| `hover-glow` | Glow effect on hover (used on cards)                      |
-| `hero-section` | Orb + scanline overlay for hero areas                     |
-| `grid-bg` | Subtle cyan grid background pattern                       |
-| `cursor-blink` | Blinking cursor ( &#124; ), appended via `::after`       |
-| `timeline` | Left-bordered timeline container                          |
-| `timeline-item` | Timeline entry with cyan dot                              |
-| `animate-float` | Floating animation (6s loop)                              |
-| `animate-float-delayed` | Floating animation with 2s delay                          |
+| `hover-glow` | Glow effect on hover (used on cards) |
+| `hero-section` | Orb + scanline overlay for hero areas |
+| `grid-bg` | Subtle cyan grid background pattern |
+| `cursor-blink` | Blinking cursor ( &#124; ), appended via `::after` |
+| `timeline` | Left-bordered timeline container |
+| `timeline-item` | Timeline entry with cyan dot |
+| `pulse-dot` | Small pulsing cyan dot (used in footer status) |
+| `pulse` | Applies the pulse-glow animation to any element |
+| `animate-float` | Floating animation (6s loop) |
+| `animate-float-delayed` | Floating animation with 2s delay |
+
+---
+
+## Animations
+
+CSS keyframe animations used throughout the theme:
+
+| Animation | Effect |
+|---|---|
+| `pulse-glow` | Fades opacity between 0.4 and 1 |
+| `float` | Gentle vertical bobbing (8px) |
+| `scanline` | Moves a highlight band vertically across an element |
+| `hud-flicker` | Subtle opacity flicker simulating a CRT display |
 
 ---
 

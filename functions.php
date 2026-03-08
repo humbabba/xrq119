@@ -15,7 +15,45 @@ add_action( 'after_setup_theme', function () {
     add_theme_support( 'post-thumbnails' );
     add_theme_support( 'title-tag' );
     add_theme_support( 'align-wide' );
+    add_theme_support( 'custom-logo', [
+        'height'      => 40,
+        'width'       => 160,
+        'flex-height' => true,
+        'flex-width'  => true,
+    ] );
     add_editor_style( 'dist/app.css' );
+    register_nav_menus( [ 'header' => 'Header Navigation' ] );
+} );
+
+/* ── Customizer: HUD settings ── */
+
+add_action( 'customize_register', function ( $wp_customize ) {
+    $wp_customize->add_section( 'xrq119_hud', [
+        'title'    => 'HUD Bar Settings',
+        'priority' => 30,
+    ] );
+
+    $wp_customize->add_setting( 'xrq119_header_screen_html', [
+        'default'           => '',
+        'sanitize_callback' => 'wp_kses_post',
+    ] );
+    $wp_customize->add_control( 'xrq119_header_screen_html', [
+        'label'       => 'Header Screen HTML',
+        'description' => 'Replaces the code rain screen with custom HTML. Leave empty for the default code rain effect.',
+        'section'     => 'xrq119_hud',
+        'type'        => 'textarea',
+    ] );
+
+    $wp_customize->add_setting( 'xrq119_footer_status_html', [
+        'default'           => '',
+        'sanitize_callback' => 'wp_kses_post',
+    ] );
+    $wp_customize->add_control( 'xrq119_footer_status_html', [
+        'label'       => 'Footer Status HTML',
+        'description' => 'Replaces the pulsing "sys.online" indicator with custom HTML. Leave empty for the default.',
+        'section'     => 'xrq119_hud',
+        'type'        => 'textarea',
+    ] );
 } );
 
 add_filter( 'body_class', function ( $classes ) {

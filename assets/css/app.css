@@ -40,9 +40,33 @@ html {
     50% { opacity: 1; }
 }
 
+.pulse {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
 @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-8px); }
+}
+
+@keyframes scanline {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(100%);
+    }
+}
+@keyframes hud-flicker {
+    0%, 97%, 100% {
+        opacity: 1;
+    }
+    98% {
+        opacity: 0.8;
+    }
+    99% {
+        opacity: 0.95;
+    }
 }
 
 @utility animate-float {
@@ -299,6 +323,110 @@ footer::before {
     background: #06b6d4;
     color: #fff;
     border-color: #06b6d4;
+}
+
+/* ── HUD bars (header + footer) ── */
+
+.hud-bar {
+    position: sticky;
+    z-index: 100;
+    height: 44px;
+    background: linear-gradient(180deg, #0a0f1a 0%, #060a12 100%);
+    border-color: rgba(6, 182, 212, 0.2);
+    animation: hud-flicker 8s ease-in-out infinite;
+}
+
+.hud-bar--top {
+    top: 0;
+    border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+    box-shadow: 0 2px 20px rgba(6, 182, 212, 0.05);
+}
+
+.hud-bar--bottom {
+    bottom: 0;
+    border-top: 1px solid rgba(6, 182, 212, 0.2);
+    box-shadow: 0 -2px 20px rgba(6, 182, 212, 0.05);
+}
+
+.hud-bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 255, 0.015) 2px,
+        rgba(0, 255, 255, 0.015) 4px
+    );
+    pointer-events: none;
+}
+
+/* ── Header screen area ── */
+
+.hud-screen {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.hud-screen--coderain {
+    width: 160px;
+    height: 30px;
+    background: #000802;
+    border: 1px solid rgba(0, 255, 70, 0.15);
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: inset 0 0 8px rgba(0, 255, 70, 0.04);
+}
+
+.hud-screen__scanline {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(0, 255, 70, 0.06) 50%,
+        transparent 100%
+    );
+    background-size: 100% 8px;
+    animation: scanline 4s linear infinite;
+}
+
+/* ── Pulse dot ── */
+
+.pulse-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22d3ee;
+    box-shadow: 0 0 6px rgba(34, 211, 238, 0.6);
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ── Header nav ── */
+
+.hud-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.hud-nav a {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+.hud-nav a:hover {
+    color: #22d3ee;
+    text-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
 }
 
 /* ── Icon system ── */
