@@ -60,7 +60,7 @@ The header contains three areas, left-aligned with the screen area pushed to the
 
 - **Logo** &mdash; displays the custom logo (Appearance > Customize > Site Identity) or the site name as fallback text
 - **Navigation** &mdash; by default, lists all categories (excluding Uncategorized) as links. If a custom menu is assigned to the **Header Navigation** location (Appearance > Menus), it replaces the category list entirely
-- **Screen area** &mdash; by default, shows a code rain (matrix-style) animation with a scanline effect. Can be replaced with custom HTML via the Customizer
+- **Screen area** &mdash; by default, shows a "code rain" animation with a scanline effect. Can be replaced with custom HTML via the Customizer
 
 ### Footer
 
