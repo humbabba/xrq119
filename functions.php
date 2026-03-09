@@ -11,6 +11,21 @@ add_action( 'wp_enqueue_scripts', function () {
     );
 } );
 
+add_action( 'wp_enqueue_scripts', function () {
+    if ( ! function_exists( 'wpcf7_enqueue_scripts' ) ) {
+        return;
+    }
+    global $post;
+    if ( $post && has_shortcode( $post->post_content, 'contact-form-7' ) ) {
+        wp_enqueue_style(
+            'xrq119-cf7',
+            get_template_directory_uri() . '/assets/css/cf7.css',
+            [ 'contact-form-7' ],
+            filemtime( get_template_directory() . '/assets/css/cf7.css' )
+        );
+    }
+}, 20 );
+
 add_action( 'after_setup_theme', function () {
     add_theme_support( 'post-thumbnails' );
     add_theme_support( 'title-tag' );

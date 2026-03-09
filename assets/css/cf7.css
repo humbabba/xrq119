@@ -1,0 +1,114 @@
+.wpcf7-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.wpcf7-form label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #06b6d4;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.wpcf7-form input[type="text"],
+.wpcf7-form input[type="email"],
+.wpcf7-form input[type="url"],
+.wpcf7-form input[type="tel"],
+.wpcf7-form textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: #e2e8f0;
+    background: #0f172a;
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: 0.5rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.wpcf7-form input[type="text"]:focus,
+.wpcf7-form input[type="email"]:focus,
+.wpcf7-form input[type="url"]:focus,
+.wpcf7-form input[type="tel"]:focus,
+.wpcf7-form textarea:focus {
+    border-color: #06b6d4;
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
+}
+
+.wpcf7-form input[type="text"]::placeholder,
+.wpcf7-form input[type="email"]::placeholder,
+.wpcf7-form input[type="url"]::placeholder,
+.wpcf7-form input[type="tel"]::placeholder,
+.wpcf7-form textarea::placeholder {
+    color: #475569;
+}
+
+.wpcf7-form textarea {
+    min-height: 10rem;
+    resize: vertical;
+}
+
+.wpcf7-form input[type="submit"] {
+    align-self: flex-start;
+    padding: 0.625rem 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #0f172a;
+    background: #06b6d4;
+    border: 1px solid #06b6d4;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.wpcf7-form input[type="submit"]:hover {
+    background: #22d3ee;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+.wpcf7-form .wpcf7-spinner {
+    vertical-align: middle;
+}
+
+.wpcf7-form .wpcf7-response-output {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin: 0;
+}
+
+.wpcf7-form.sent .wpcf7-response-output {
+    border-color: #06b6d4;
+    color: #06b6d4;
+    background: rgba(6, 182, 212, 0.08);
+}
+
+.wpcf7-form.failed .wpcf7-response-output,
+.wpcf7-form.aborted .wpcf7-response-output,
+.wpcf7-form.spam .wpcf7-response-output {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.wpcf7-form .wpcf7-not-valid-tip {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #ef4444;
+    margin-top: 0.25rem;
+}
+
+.wpcf7-form .wpcf7-not-valid {
+    border-color: #ef4444;
+}

@@ -155,6 +155,16 @@ html {
 .corner-accent:hover::before,
 .corner-accent:hover::after { opacity: 1; }
 
+/* ── Card title ── */
+
+.card-title {
+    font-family: var(--font-mono);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #000;
+    margin: 0.25rem 0 0;
+}
+
 /* ── Timeline line + dots ── */
 
 .timeline {
@@ -437,20 +447,26 @@ footer::before {
     padding-left: 0.75rem;
 }
 
-/* Post body prose */
+/* ── Global heading styles (excluded on home page and inside custom blocks) ── */
 
-.single-post__body {
-    font-size: 1.0625rem;
-    line-height: 1.85;
-    color: #374151;
+body:not(.home) h1:not([class*="wp-block-xrq119-"] *) {
+    font-family: var(--font-mono);
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #0891b2;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.25;
+    margin: 0 0 2rem;
 }
 
-/* Prose styles — :not() excludes custom block descendants so blocks render identically on pages and posts */
-.single-post__body p:not([class*="wp-block-xrq119-"] *) {
-    margin-bottom: 1.5em;
+@media (min-width: 640px) {
+    body:not(.home) h1:not([class*="wp-block-xrq119-"] *) {
+        font-size: 2.25rem;
+    }
 }
 
-.single-post__body h2:not([class*="wp-block-xrq119-"] *) {
+body:not(.home) h2:not([class*="wp-block-xrq119-"] *):not(.card-title) {
     font-family: var(--font-mono);
     font-size: 1.375rem;
     font-weight: 700;
@@ -460,7 +476,7 @@ footer::before {
     margin: 2.5em 0 0.75em;
 }
 
-.single-post__body h3:not([class*="wp-block-xrq119-"] *) {
+body:not(.home) h3:not([class*="wp-block-xrq119-"] *) {
     font-family: var(--font-mono);
     font-size: 1.125rem;
     font-weight: 700;
@@ -470,7 +486,7 @@ footer::before {
     margin: 2em 0 0.5em;
 }
 
-.single-post__body h4:not([class*="wp-block-xrq119-"] *) {
+body:not(.home) h4:not([class*="wp-block-xrq119-"] *) {
     font-family: var(--font-mono);
     font-size: 1rem;
     font-weight: 700;
@@ -480,34 +496,66 @@ footer::before {
     margin: 1.75em 0 0.5em;
 }
 
-.single-post__body a:not([class*="wp-block-xrq119-"] *) {
+body:not(.home) h5:not([class*="wp-block-xrq119-"] *) {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #155e75;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 1.5em 0 0.5em;
+}
+
+body:not(.home) h6:not([class*="wp-block-xrq119-"] *) {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 1.5em 0 0.5em;
+}
+
+/* ── Prose typography (posts + pages, excluding home and custom blocks) ── */
+
+:is(.single-post__body, body:not(.home) article.page) {
+    font-size: 1.0625rem;
+    line-height: 1.85;
+    color: #374151;
+}
+
+:is(.single-post__body, body:not(.home) article.page) p:not([class*="wp-block-xrq119-"] *) {
+    margin-bottom: 1.5em;
+}
+
+:is(.single-post__body, body:not(.home) article.page) a:not([class*="wp-block-xrq119-"] *) {
     color: #0891b2;
     text-decoration: underline;
     text-underline-offset: 2px;
     transition: color 0.2s;
 }
 
-.single-post__body a:not([class*="wp-block-xrq119-"] *):hover {
+:is(.single-post__body, body:not(.home) article.page) a:not([class*="wp-block-xrq119-"] *):hover {
     color: #22d3ee;
 }
 
-.single-post__body :is(ul, ol):not([class*="wp-block-xrq119-"] *) {
+:is(.single-post__body, body:not(.home) article.page) :is(ul, ol):not([class*="wp-block-xrq119-"] *) {
     margin: 0 0 1.5em 1.5em;
 }
 
-.single-post__body ul:not([class*="wp-block-xrq119-"] *) {
+:is(.single-post__body, body:not(.home) article.page) ul:not([class*="wp-block-xrq119-"] *) {
     list-style: disc;
 }
 
-.single-post__body ol:not([class*="wp-block-xrq119-"] *) {
+:is(.single-post__body, body:not(.home) article.page) ol:not([class*="wp-block-xrq119-"] *) {
     list-style: decimal;
 }
 
-.single-post__body li:not([class*="wp-block-xrq119-"] *) {
+:is(.single-post__body, body:not(.home) article.page) li:not([class*="wp-block-xrq119-"] *) {
     margin-bottom: 0.4em;
 }
 
-.single-post__body blockquote {
+:is(.single-post__body, body:not(.home) article.page) blockquote {
     font-family: var(--font-mono);
     font-style: italic;
     color: #64748b;
@@ -516,7 +564,7 @@ footer::before {
     margin: 1.5em 0;
 }
 
-.single-post__body pre {
+:is(.single-post__body, body:not(.home) article.page) pre {
     background: #0f172a;
     color: #e2e8f0;
     font-family: var(--font-mono);
@@ -529,7 +577,7 @@ footer::before {
     border: 1px solid rgba(34, 211, 238, 0.15);
 }
 
-.single-post__body code {
+:is(.single-post__body, body:not(.home) article.page) code {
     font-family: var(--font-mono);
     font-size: 0.875em;
     background: #f1f5f9;
@@ -538,7 +586,7 @@ footer::before {
     color: #0e7490;
 }
 
-.single-post__body pre code {
+:is(.single-post__body, body:not(.home) article.page) pre code {
     background: none;
     padding: 0;
     border-radius: 0;
@@ -546,34 +594,34 @@ footer::before {
     font-size: inherit;
 }
 
-.single-post__body img {
+:is(.single-post__body, body:not(.home) article.page) img {
     max-width: 100%;
     height: auto;
     border-radius: 0.5rem;
     margin: 1.5em 0;
 }
 
-.single-post__body hr {
+:is(.single-post__body, body:not(.home) article.page) hr {
     border: none;
     border-top: 1px solid #e5e7eb;
     margin: 2.5em 0;
 }
 
-.single-post__body table {
+:is(.single-post__body, body:not(.home) article.page) table {
     width: 100%;
     border-collapse: collapse;
     margin: 1.5em 0;
     font-size: 0.9375rem;
 }
 
-.single-post__body th,
-.single-post__body td {
+:is(.single-post__body, body:not(.home) article.page) th,
+:is(.single-post__body, body:not(.home) article.page) td {
     border: 1px solid #e5e7eb;
     padding: 0.625rem 0.875rem;
     text-align: left;
 }
 
-.single-post__body th {
+:is(.single-post__body, body:not(.home) article.page) th {
     background: #f8fafc;
     font-family: var(--font-mono);
     font-size: 0.8125rem;

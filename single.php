@@ -52,7 +52,7 @@
         </nav>
     <?php endif; ?>
 
-    <h1 class="text-3xl sm:text-4xl font-bold font-mono text-cyan-600 tracking-[0.1em] uppercase leading-tight mb-8">
+    <h1>
         <?php the_title(); ?>
     </h1>
 

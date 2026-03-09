@@ -43,7 +43,7 @@
                         <?php endif; ?>
                     </a>
                     <div class="p-5 flex flex-col grow">
-                        <h2 class="font-bold text-lg mb-2">
+                        <h2 class="card-title">
                             <a href="<?= $href; ?>"<?= $target; ?> class="hover:text-cyan-600 transition-colors"><?php the_title(); ?></a>
                         </h2>
                         <?php if ( has_excerpt() ) : ?>
