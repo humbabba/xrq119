@@ -24,18 +24,18 @@
             <?php endif; ?>
         </a>
 
-        <nav class="hud-nav">
+        <nav class="hud-nav" data-priority-nav>
             <?php if ( has_nav_menu( 'header' ) ) :
                 wp_nav_menu( [
                     'theme_location' => 'header',
                     'container'      => false,
-                    'menu_class'     => 'flex items-center gap-4',
+                    'menu_class'     => 'flex items-baseline gap-4',
                     'depth'          => 1,
                 ] );
             else :
-                $cats = get_categories( [ 'exclude' => get_cat_ID( 'Uncategorized' ), 'hide_empty' => false ] );
+                $cats = get_categories( [ 'exclude' => get_cat_ID( 'Uncategorized' ), 'hide_empty' => true ] );
                 if ( $cats ) : ?>
-                    <ul class="flex items-center gap-4">
+                    <ul class="flex items-baseline gap-4">
                         <?php foreach ( $cats as $cat ) : ?>
                             <li><a href="<?= esc_url( get_category_link( $cat ) ); ?>"><?= esc_html( $cat->name ); ?></a></li>
                         <?php endforeach; ?>
@@ -55,6 +55,100 @@
 
     </div>
 </header>
+
+<script>
+(function(){
+    const nav = document.querySelector('[data-priority-nav]');
+    if (!nav) return;
+    const ul = nav.querySelector('ul');
+    if (!ul) return;
+
+    // Prevent the ul from wrapping so we can measure overflow
+    ul.style.flexWrap = 'nowrap';
+
+    // Create the "more" item
+    const moreLi = document.createElement('li');
+    moreLi.className = 'hud-nav__more';
+    moreLi.style.display = 'none';
+    moreLi.innerHTML =
+        '<button class="hud-nav__more-toggle" aria-expanded="false">' +
+            '<svg viewBox="0 0 12 12"><polyline points="2,4 6,8 10,4"/></svg>' +
+        '</button>' +
+        '<ul class="hud-nav__dropdown"></ul>';
+    ul.appendChild(moreLi);
+
+    const toggle = moreLi.querySelector('.hud-nav__more-toggle');
+    const dropdown = moreLi.querySelector('.hud-nav__dropdown');
+    const items = Array.from(ul.children).filter(function(li){ return li !== moreLi; });
+
+    // Cache natural widths (measured once with everything visible)
+    const widths = items.map(function(li){ return li.getBoundingClientRect().width; });
+    moreLi.style.display = '';
+    const moreWidth = moreLi.getBoundingClientRect().width;
+    moreLi.style.display = 'none';
+
+    const gap = 16; // gap-4 = 1rem
+
+    toggle.addEventListener('click', function(e){
+        e.stopPropagation();
+        const open = moreLi.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', String(open));
+    });
+
+    document.addEventListener('click', function(e){
+        if (!moreLi.contains(e.target)) {
+            moreLi.classList.remove('is-open');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    function update() {
+        // Reset all visible
+        items.forEach(function(li){ li.style.display = ''; });
+        dropdown.innerHTML = '';
+        moreLi.style.display = 'none';
+        moreLi.classList.remove('is-open');
+
+        var available = nav.getBoundingClientRect().width;
+
+        // First pass: find where items start to overflow
+        var total = 0;
+        var breakIdx = -1;
+        for (var i = 0; i < items.length; i++) {
+            total += widths[i] + (i > 0 ? gap : 0);
+            if (total > available) {
+                breakIdx = i;
+                break;
+            }
+        }
+
+        if (breakIdx === -1) return; // everything fits
+
+        // Second pass: account for the "more" button
+        var limit = available - moreWidth - gap;
+        total = 0;
+        breakIdx = 0;
+        for (var i = 0; i < items.length; i++) {
+            total += widths[i] + (i > 0 ? gap : 0);
+            if (total > limit) {
+                breakIdx = i;
+                break;
+            }
+        }
+
+        moreLi.style.display = '';
+        for (var i = breakIdx; i < items.length; i++) {
+            items[i].style.display = 'none';
+            var clone = items[i].cloneNode(true);
+            clone.style.display = '';
+            dropdown.appendChild(clone);
+        }
+    }
+
+    update();
+    window.addEventListener('resize', update);
+})();
+</script>
 
 <?php if ( ! $screen_html ) : ?>
 <script>

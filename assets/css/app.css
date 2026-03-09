@@ -17,7 +17,7 @@ html {
     font-style: normal;
     font-weight: 400 800;
     font-display: swap;
-    src: url('../fonts/inter-latin.woff2') format('woff2');
+    src: url('../assets/fonts/inter-latin.woff2') format('woff2');
 }
 
 @font-face {
@@ -25,7 +25,7 @@ html {
     font-style: normal;
     font-weight: 400 700;
     font-display: swap;
-    src: url('../fonts/jetbrains-mono-latin.woff2') format('woff2');
+    src: url('../assets/fonts/jetbrains-mono-latin.woff2') format('woff2');
 }
 
 @theme {
@@ -50,13 +50,14 @@ html {
 }
 
 @keyframes scanline {
-    0% {
+    0%, 20% {
         transform: translateY(-100%);
     }
     100% {
         transform: translateY(100%);
     }
 }
+
 @keyframes hud-flicker {
     0%, 97%, 100% {
         opacity: 1;
@@ -91,7 +92,7 @@ html {
     left: 2rem;
     width: 18rem;
     height: 18rem;
-    background: rgba(6, 182, 212, 0.1);
+    background: rgba(6, 182, 212, 0.3);
     border-radius: 50%;
     filter: blur(48px);
     animation: float 6s ease-in-out infinite;
@@ -105,9 +106,10 @@ html {
         0deg,
         transparent,
         transparent 2px,
-        rgba(0, 255, 255, 0.015) 2px,
-        rgba(0, 255, 255, 0.015) 4px
+        rgba(0, 255, 255, 0.06) 2px,
+        rgba(0, 255, 255, 0.06) 4px
     );
+    animation: scanline 10s linear infinite;
     pointer-events: none;
 }
 
@@ -333,7 +335,6 @@ footer::before {
     height: 44px;
     background: linear-gradient(180deg, #0a0f1a 0%, #060a12 100%);
     border-color: rgba(6, 182, 212, 0.2);
-    animation: hud-flicker 8s ease-in-out infinite;
 }
 
 .hud-bar--top {
@@ -387,11 +388,11 @@ footer::before {
     background: linear-gradient(
         180deg,
         transparent 0%,
-        rgba(0, 255, 70, 0.06) 50%,
+        rgba(0, 255, 70, 0.1) 50%,
         transparent 100%
     );
     background-size: 100% 8px;
-    animation: scanline 4s linear infinite;
+    animation: scanline 6s linear infinite;
 }
 
 /* ── Pulse dot ── */
@@ -408,10 +409,18 @@ footer::before {
 
 /* ── Header nav ── */
 
+.hud-nav {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
 .hud-nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
+    align-items: baseline;
 }
 
 .hud-nav a {
@@ -422,11 +431,78 @@ footer::before {
     color: #cbd5e1;
     text-decoration: none;
     transition: color 0.3s, text-shadow 0.3s;
+    white-space: nowrap;
 }
 
 .hud-nav a:hover {
     color: #22d3ee;
     text-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+}
+
+/* Priority+ overflow dropdown */
+
+.hud-nav__more {
+    position: relative;
+}
+
+.hud-nav__more-toggle {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: normal;
+    color: #cbd5e1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+.hud-nav__more-toggle:hover {
+    color: #22d3ee;
+    text-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+}
+
+.hud-nav__more-toggle svg {
+    width: 10px;
+    height: 10px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vertical-align: middle;
+    transition: transform 0.2s;
+}
+
+.hud-nav__more.is-open .hud-nav__more-toggle svg {
+    transform: rotate(180deg);
+}
+
+.hud-nav__dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: rgba(2, 6, 23, 0.95);
+    border: 1px solid rgba(34, 211, 238, 0.2);
+    padding: 6px 0;
+    min-width: 140px;
+    z-index: 100;
+    list-style: none;
+    margin: 0;
+}
+
+.hud-nav__more.is-open .hud-nav__dropdown {
+    display: block;
+}
+
+.hud-nav__dropdown li a {
+    display: block;
+    padding: 6px 16px;
+}
+
+.hud-nav__more[hidden] {
+    display: none;
 }
 
 /* ── Icon system ── */
