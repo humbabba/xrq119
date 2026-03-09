@@ -115,12 +115,12 @@ The card image and title are individually clickable links. If External Link is e
 
 Displays an individual post in a centered narrow column (`max-w-2xl`). Layout from top to bottom:
 
-- **Breadcrumbs** &mdash; linked category names separated by `/`, mono font, cyan, uppercase
-- **Title** &mdash; large mono heading
-- **Pull quote** &mdash; the post excerpt displayed as an italic blockquote with a cyan left border
-- **Featured image** &mdash; full-width with rounded corners and a styled caption (mono, small, cyan left-border accent)
-- **Body** &mdash; full prose styling covering paragraphs, headings (h2&ndash;h4 in mono/cyan/uppercase), links, lists, blockquotes, code blocks (dark background), images, tables, and horizontal rules
-- **Tags** &mdash; clickable cyan pills at the bottom, separated by a top border
+- **Breadcrumbs:** Linked category names separated by `/`, mono font, cyan, uppercase
+- **Title:** Large mono heading
+- **Pull quote:** The post excerpt displayed as an italic blockquote with a cyan left border
+- **Featured image:** Full-width with rounded corners and a styled caption (mono, small, cyan left-border accent)
+- **Body:** Full prose styling covering paragraphs, headings (h2&ndash;h4 in mono/cyan/uppercase), links, lists, blockquotes, code blocks (dark background), images, tables, and horizontal rules
+- **Tags:** Clickable cyan pills at the bottom, separated by a top border
 
 ### `page.php` &mdash; Block content
 
@@ -142,7 +142,7 @@ Overrides where a post's card links to in the archive grid.
 | **External URL** | The destination URL |
 | **Open in new tab** | Toggle &mdash; adds `target="_blank"` |
 
-When enabled, the card's image and title link to this URL instead of the post permalink.
+When enabled, the card's image and title link to this URL instead of the post permalink. Visiting the post's own URL will also 301-redirect to the external URL. To bypass the redirect (e.g. for editing or previewing), append `?xrq119` to the post URL.
 
 ### Card Buttons
 

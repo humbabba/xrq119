@@ -102,6 +102,19 @@ function xrq119_get_external_link( $post_id = null ) {
     ];
 }
 
+/* ── External link redirect ── */
+
+add_action( 'template_redirect', function () {
+    if ( ! is_singular( 'post' ) || isset( $_GET['xrq119'] ) ) {
+        return;
+    }
+    $ext = xrq119_get_external_link( get_queried_object_id() );
+    if ( $ext ) {
+        wp_redirect( $ext['url'], 301 );
+        exit;
+    }
+} );
+
 /* ── Theme docs admin page ── */
 
 add_action( 'admin_menu', function () {
