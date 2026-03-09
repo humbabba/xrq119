@@ -13,16 +13,17 @@ xrq119/
   assets/
     css/app.css        <- Tailwind source (includes icon system + custom components)
     fonts/             <- Inter + JetBrains Mono (self-hosted)
-  build/               <- Compiled block JS (generated)
   dist/
-    app.css            <- Compiled + minified CSS (generated)
-  src/
-    index.js           <- Block JS entry point
-    blocks/            <- Custom block definitions
-    external-link-panel.js
-    card-buttons-panel.js
-  functions.php        <- Theme setup, meta registration, block registration, Customizer
-  header.php           <- Sticky dark HUD header (logo, nav, screen area)
+    css/app.css        <- Compiled + minified CSS (generated)
+    js/                <- Compiled block + admin JS (generated)
+    js/
+      index.js         <- Block JS entry point
+      admin-sortable.js <- Drag-and-drop ordering for admin lists (SortableJS)
+      blocks/          <- Custom block definitions
+      external-link-panel.js
+      card-buttons-panel.js
+  functions.php        <- Theme setup, meta registration, block registration, Customizer, drag-and-drop ordering
+  header.php           <- Sticky dark HUD header (logo, nav, screen area, priority+ nav)
   footer.php           <- Sticky dark HUD footer (status indicator, copyright)
   index.php            <- Post/category archive (card grid)
   page.php             <- Single page (renders block content)
@@ -59,7 +60,7 @@ The theme features sticky dark header and footer bars with a subtle scanline ove
 The header contains three areas, left-aligned with the screen area pushed to the right:
 
 - **Logo** &mdash; displays the custom logo (Appearance > Customize > Site Identity) or the site name as fallback text
-- **Navigation** &mdash; by default, lists all categories (excluding Uncategorized) as links. If a custom menu is assigned to the **Header Navigation** location (Appearance > Menus), it replaces the category list entirely
+- **Navigation** &mdash; by default, lists categories that have posts (excluding Uncategorized) as links, respecting custom drag-and-drop order if set. If a custom menu is assigned to the **Header Navigation** location (Appearance > Menus), it replaces the category list entirely. When items overflow the available space, they collapse into a dropdown with a chevron (priority+ pattern)
 - **Screen area** &mdash; by default, shows a "code rain" animation with a scanline effect. Can be replaced with custom HTML via the Customizer
 
 ### Footer
@@ -78,6 +79,20 @@ Under **Appearance > Customize > HUD Bar Settings**:
 |---|---|
 | **Header Screen HTML** | Custom HTML that completely replaces the code rain screen. Leave empty for the default animation |
 | **Footer Status HTML** | Custom HTML that completely replaces the pulsing "sys.online" indicator. Leave empty for the default |
+
+---
+
+## Drag-and-drop ordering
+
+Categories and posts can be reordered by dragging and dropping in the WordPress admin. Each row has a drag handle on the left.
+
+### Category ordering
+
+On **Posts > Categories**, drag rows to reorder. The custom order is reflected in the default header navigation and persists across page loads. A "Sorted" notice appears at the top of the page with an "Unsort" link to restore alphabetical order.
+
+### Post ordering (per category)
+
+On the posts list filtered by a category (e.g. **Posts** filtered by a specific category via the dropdown or a direct URL like `edit.php?category_name=portfolio` or `edit.php?cat=3`), drag rows to reorder. The custom order applies to the frontend category archive page. New posts added after ordering appear at the end (by date). A "Sorted" notice with an "Unsort" link appears when a custom order is active.
 
 ---
 

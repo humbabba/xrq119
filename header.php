@@ -34,6 +34,11 @@
                 ] );
             else :
                 $cats = get_categories( [ 'exclude' => get_cat_ID( 'Uncategorized' ), 'hide_empty' => true ] );
+                usort( $cats, function( $a, $b ) {
+                    $oa = (int) get_term_meta( $a->term_id, '_xrq119_order', true );
+                    $ob = (int) get_term_meta( $b->term_id, '_xrq119_order', true );
+                    return $oa - $ob;
+                } );
                 if ( $cats ) : ?>
                     <ul class="flex items-baseline gap-4">
                         <?php foreach ( $cats as $cat ) : ?>

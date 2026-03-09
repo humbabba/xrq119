@@ -58,7 +58,6 @@
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
-                        <p class="font-mono text-cyan-600 text-xs mt-3 uppercase tracking-wider"><?= esc_html( get_the_date( 'M Y' ) ); ?></p>
                         <?php if ( $card_buttons ) : ?>
                             <div class="flex flex-wrap gap-2 mt-4 pt-3 border-t border-gray-100">
                                 <?php foreach ( $card_buttons as $btn ) :

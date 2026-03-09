@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"wp-scripts start\" \"npx @tailwindcss/cli -i assets/css/app.css -o dist/app.css --watch\"",
-    "dev:css": "npx @tailwindcss/cli -i assets/css/app.css -o dist/app.css --watch",
+    "dev": "concurrently \"wp-scripts start\" \"npx @tailwindcss/cli -i assets/css/app.css -o dist/css/app.css --watch\"",
+    "dev:css": "npx @tailwindcss/cli -i assets/css/app.css -o dist/css/app.css --watch",
     "dev:blocks": "wp-scripts start",
-    "build": "wp-scripts build && npx @tailwindcss/cli -i assets/css/app.css -o dist/app.css --minify"
+    "build": "wp-scripts build && npx @tailwindcss/cli -i assets/css/app.css -o dist/css/app.css --minify"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
     "@tailwindcss/cli": "^4.2.1",
     "@wordpress/scripts": "^31.6.0",
     "concurrently": "^9.2.1",
+    "sortablejs": "^1.15.7",
     "tailwindcss": "^4.2.1"
   }
 }
