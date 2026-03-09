@@ -16,15 +16,22 @@ registerBlockType( 'xrq119/icon-card', {
 	},
 	edit( { attributes, setAttributes } ) {
 		const blockProps = useBlockProps( {
-			className:
-				'corner-accent border border-gray-200 rounded-xl p-6 bg-gray-50/50 max-w-md',
+			className: 'corner-accent',
+			style: {
+				maxWidth: '28rem',
+				padding: '1.5rem',
+				border: '1px solid #e5e7eb',
+				borderRadius: '0.75rem',
+				background: 'rgba(249, 250, 251, 0.5)',
+			},
 		} );
 		return (
 			<div { ...blockProps }>
-				<div className="flex items-center gap-5">
+				<div style={ { display: 'flex', alignItems: 'center', gap: '1.25rem' } }>
 					<RichText
 						tagName="div"
-						className="card-icon text-4xl shrink-0"
+						className="card-icon"
+						style={ { fontSize: '2.25rem', flexShrink: 0, lineHeight: 1 } }
 						value={ attributes.icon }
 						onChange={ ( v ) => setAttributes( { icon: v } ) }
 						placeholder="🎓"
@@ -32,7 +39,7 @@ registerBlockType( 'xrq119/icon-card', {
 					<div>
 						<RichText
 							tagName="h3"
-							className="font-bold text-lg"
+							style={ { fontWeight: 700, fontSize: '1.125rem', margin: 0 } }
 							value={ attributes.heading }
 							onChange={ ( v ) =>
 								setAttributes( { heading: v } )
@@ -41,7 +48,8 @@ registerBlockType( 'xrq119/icon-card', {
 						/>
 						<RichText
 							tagName="p"
-							className="card-desc text-gray-500 text-sm"
+							className="card-desc"
+							style={ { color: '#6b7280', fontSize: '0.875rem', margin: 0 } }
 							value={ attributes.description }
 							onChange={ ( v ) =>
 								setAttributes( { description: v } )

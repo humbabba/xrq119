@@ -13,19 +13,20 @@ xrq119/
   assets/
     css/app.css        <- Tailwind source (includes icon system + custom components)
     fonts/             <- Inter + JetBrains Mono (self-hosted)
-  dist/
-    css/app.css        <- Compiled + minified CSS (generated)
-    js/                <- Compiled block + admin JS (generated)
-    js/
+    js/                <- JS source
       index.js         <- Block JS entry point
       admin-sortable.js <- Drag-and-drop ordering for admin lists (SortableJS)
       blocks/          <- Custom block definitions
       external-link-panel.js
       card-buttons-panel.js
+  dist/                <- Compiled output (generated)
+    css/app.css        <- Compiled + minified CSS
+    js/                <- Compiled JS
   functions.php        <- Theme setup, meta registration, block registration, Customizer, drag-and-drop ordering
-  header.php           <- Sticky dark HUD header (logo, nav, screen area, priority+ nav)
+  header.php           <- Sticky dark HUD header (logo, nav, priority+ overflow, category dropdowns)
   footer.php           <- Sticky dark HUD footer (status indicator, copyright)
   index.php            <- Post/category archive (card grid)
+  single.php           <- Single post (breadcrumbs, pull quote, featured image, body, tags)
   page.php             <- Single page (renders block content)
   style.css            <- WP theme header only
 ```
@@ -59,17 +60,17 @@ The theme features sticky dark header and footer bars with a subtle scanline ove
 
 The header contains three areas, left-aligned with the screen area pushed to the right:
 
-- **Logo** &mdash; displays the custom logo (Appearance > Customize > Site Identity) or the site name as fallback text
-- **Navigation** &mdash; by default, lists categories that have posts (excluding Uncategorized) as links, respecting custom drag-and-drop order if set. If a custom menu is assigned to the **Header Navigation** location (Appearance > Menus), it replaces the category list entirely. When items overflow the available space, they collapse into a dropdown with a chevron (priority+ pattern)
-- **Screen area** &mdash; by default, shows a "code rain" animation with a scanline effect. Can be replaced with custom HTML via the Customizer
+- **Logo:** Displays the custom logo (Appearance > Customize > Site Identity) or the site nfame as fallback text
+- **Navigation:** By default, lists top-level categories that have posts (excluding Uncategorized) as links, respecting custom drag-and-drop order if set. Categories with child categories display a click-to-toggle dropdown: the first item is "All {Category}" (links to the parent archive), followed by each child. If a custom menu is assigned to the **Header Navigation** location (Appearance > Menus), it replaces the category list entirely. When items overflow the available space, they collapse into a priority+ "more" dropdown with a chevron; categories with children are flattened in this dropdown with `- ` prefixed child items.
+- **Screen area:** By default, shows a "code rain" animation with a scanline effect. Can be replaced with custom HTML via the Customizer (appearance > customize)
 
 ### Footer
 
 The footer contains three items in a row:
 
-- **Status indicator** &mdash; by default, a pulsing cyan dot with "sys.online" text. Can be replaced with custom HTML via the Customizer
-- **Copyright** &mdash; year + site name
-- **Theme ID** &mdash; "xrq119" (hidden on small screens)
+- **Status indicator:** By default, a pulsing cyan dot with "sys.online" text. Can be replaced with custom HTML via the Customizer (appearance > customize)
+- **Copyright:** Year + site name
+- **Theme ID:** "xrq119" (hidden on small screens)
 
 ### Customizer settings
 
@@ -102,18 +103,28 @@ On the posts list filtered by a category (e.g. **Posts** filtered by a specific 
 
 Displays posts as cards in a responsive grid (1/2/3 columns). Each card shows:
 
-- **Thumbnail** (or a fallback gradient with the year)
+- **Thumbnail** (or a fallback gradient with the title)
 - **Title**
 - **Excerpt** (if set)
 - **Tags** as colored pills
-- **Date**
-- **Buttons** (if configured &mdash; see Card Buttons below)
+- **Buttons** (if configured; see Card Buttons below)
 
 The card image and title are individually clickable links. If External Link is enabled on a post, they point to the external URL; otherwise they link to the post itself.
 
+### `single.php` &mdash; Single post
+
+Displays an individual post in a centered narrow column (`max-w-2xl`). Layout from top to bottom:
+
+- **Breadcrumbs** &mdash; linked category names separated by `/`, mono font, cyan, uppercase
+- **Title** &mdash; large mono heading
+- **Pull quote** &mdash; the post excerpt displayed as an italic blockquote with a cyan left border
+- **Featured image** &mdash; full-width with rounded corners and a styled caption (mono, small, cyan left-border accent)
+- **Body** &mdash; full prose styling covering paragraphs, headings (h2&ndash;h4 in mono/cyan/uppercase), links, lists, blockquotes, code blocks (dark background), images, tables, and horizontal rules
+- **Tags** &mdash; clickable cyan pills at the bottom, separated by a top border
+
 ### `page.php` &mdash; Block content
 
-Renders any page or post's block editor content directly. Used for the home page and any other page.
+Renders any page's block editor content directly. Used for the home page and any other page.
 
 ---
 
@@ -262,5 +273,5 @@ CSS keyframe animations used throughout the theme:
 
 Self-hosted in `assets/fonts/`:
 
-- **Inter** (400&ndash;800) &mdash; body text (`font-sans`)
-- **JetBrains Mono** (400&ndash;700) &mdash; headings, UI, code (`font-mono`)
+- **Inter** (400&ndash;800) for body text (`font-sans`)
+- **JetBrains Mono** (400&ndash;700) for headings, UI, code (`font-mono`)

@@ -32,24 +32,24 @@ registerBlockType( 'xrq119/skill-group', {
 				<div { ...blockProps }>
 					<RichText
 						tagName="h3"
-						className="font-mono font-bold text-sm text-cyan-700 mb-3 uppercase tracking-wider"
+						style={ { fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.875rem', color: '#0e7490', margin: '0 0 0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' } }
 						value={ attributes.heading }
 						onChange={ ( v ) =>
 							setAttributes( { heading: v } )
 						}
 						placeholder="Category"
 					/>
-					<div className="flex flex-wrap gap-2">
+					<div style={ { display: 'flex', flexWrap: 'wrap', gap: '0.5rem' } }>
 						{ tagList.map( ( tag, i ) => (
 							<span
 								key={ i }
-								className="px-3 py-1.5 text-sm font-medium rounded-md bg-cyan-50 text-cyan-800 border border-cyan-200/50"
+								style={ { padding: '0.375rem 0.75rem', fontSize: '0.875rem', fontWeight: 500, borderRadius: '0.375rem', background: '#ecfeff', color: '#155e75', border: '1px solid rgba(165, 243, 252, 0.5)' } }
 							>
 								{ tag }
 							</span>
 						) ) }
 						{ tagList.length === 0 && (
-							<span className="text-gray-400 text-sm italic">
+							<span style={ { color: '#9ca3af', fontSize: '0.875rem', fontStyle: 'italic' } }>
 								Add tags in the sidebar →
 							</span>
 						) }

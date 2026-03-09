@@ -12,26 +12,31 @@ registerBlockType( 'xrq119/timeline-entry', {
 		items: { type: 'string', source: 'html', selector: 'ul' },
 	},
 	edit( { attributes, setAttributes } ) {
-		const blockProps = useBlockProps( { className: 'timeline-item' } );
+		const blockProps = useBlockProps( {
+			className: 'timeline-item',
+			style: { position: 'relative', marginBottom: '3rem' },
+		} );
 		return (
 			<div { ...blockProps }>
 				<RichText
 					tagName="span"
-					className="period font-mono text-cyan-600 text-xs uppercase tracking-wider"
+					className="period"
+					style={ { fontFamily: 'var(--font-mono)', color: '#0891b2', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' } }
 					value={ attributes.period }
 					onChange={ ( v ) => setAttributes( { period: v } ) }
 					placeholder="2018 – Present"
 				/>
 				<RichText
 					tagName="h3"
-					className="text-xl font-bold mt-1"
+					style={ { fontSize: '1.25rem', fontWeight: 700, margin: '0.25rem 0 0' } }
 					value={ attributes.title }
 					onChange={ ( v ) => setAttributes( { title: v } ) }
 					placeholder="Job Title"
 				/>
 				<RichText
 					tagName="p"
-					className="org text-gray-500 text-sm mb-3"
+					className="org"
+					style={ { color: '#6b7280', fontSize: '0.875rem', margin: '0 0 0.75rem' } }
 					value={ attributes.org }
 					onChange={ ( v ) => setAttributes( { org: v } ) }
 					placeholder="Company · Location"
@@ -39,7 +44,7 @@ registerBlockType( 'xrq119/timeline-entry', {
 				<RichText
 					tagName="ul"
 					multiline="li"
-					className="space-y-2 text-gray-600 text-sm list-none pl-0"
+					style={ { color: '#4b5563', fontSize: '0.875rem', listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' } }
 					value={ attributes.items }
 					onChange={ ( v ) => setAttributes( { items: v } ) }
 					placeholder="Accomplishment"

@@ -33,16 +33,38 @@
                     'depth'          => 1,
                 ] );
             else :
-                $cats = get_categories( [ 'exclude' => get_cat_ID( 'Uncategorized' ), 'hide_empty' => true ] );
-                usort( $cats, function( $a, $b ) {
+                $parents = get_categories( [ 'exclude' => get_cat_ID( 'Uncategorized' ), 'hide_empty' => true, 'parent' => 0 ] );
+                usort( $parents, function( $a, $b ) {
                     $oa = (int) get_term_meta( $a->term_id, '_xrq119_order', true );
                     $ob = (int) get_term_meta( $b->term_id, '_xrq119_order', true );
                     return $oa - $ob;
                 } );
-                if ( $cats ) : ?>
+                if ( $parents ) : ?>
                     <ul class="flex items-baseline gap-4">
-                        <?php foreach ( $cats as $cat ) : ?>
-                            <li><a href="<?= esc_url( get_category_link( $cat ) ); ?>"><?= esc_html( $cat->name ); ?></a></li>
+                        <?php foreach ( $parents as $cat ) :
+                            $children = get_categories( [ 'hide_empty' => true, 'parent' => $cat->term_id ] );
+                            usort( $children, function( $a, $b ) {
+                                $oa = (int) get_term_meta( $a->term_id, '_xrq119_order', true );
+                                $ob = (int) get_term_meta( $b->term_id, '_xrq119_order', true );
+                                return $oa - $ob;
+                            } );
+                        ?>
+                            <?php if ( $children ) : ?>
+                                <li class="hud-nav__has-children">
+                                    <button class="hud-nav__parent-toggle" aria-expanded="false">
+                                        <?= esc_html( $cat->name ); ?>
+                                        <svg viewBox="0 0 12 12"><polyline points="2,4 6,8 10,4"/></svg>
+                                    </button>
+                                    <ul class="hud-nav__sub">
+                                        <li><a href="<?= esc_url( get_category_link( $cat ) ); ?>">All <?= esc_html( $cat->name ); ?></a></li>
+                                        <?php foreach ( $children as $child ) : ?>
+                                            <li><a href="<?= esc_url( get_category_link( $child ) ); ?>"><?= esc_html( $child->name ); ?></a></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </li>
+                            <?php else : ?>
+                                <li><a href="<?= esc_url( get_category_link( $cat ) ); ?>"><?= esc_html( $cat->name ); ?></a></li>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </ul>
                 <?php endif;
@@ -63,16 +85,39 @@
 
 <script>
 (function(){
-    const nav = document.querySelector('[data-priority-nav]');
+    var nav = document.querySelector('[data-priority-nav]');
     if (!nav) return;
-    const ul = nav.querySelector('ul');
+    var ul = nav.querySelector('ul');
     if (!ul) return;
 
-    // Prevent the ul from wrapping so we can measure overflow
+    // ── Category sub-menu toggles (event delegation) ──
+    document.addEventListener('click', function(e){
+        var btn = e.target.closest('.hud-nav__parent-toggle');
+        if (btn) {
+            e.stopPropagation();
+            var li = btn.closest('.hud-nav__has-children');
+            var open = li.classList.toggle('is-open');
+            btn.setAttribute('aria-expanded', String(open));
+            // Close other open category dropdowns
+            document.querySelectorAll('.hud-nav__has-children.is-open').forEach(function(other){
+                if (other !== li) {
+                    other.classList.remove('is-open');
+                    other.querySelector('.hud-nav__parent-toggle').setAttribute('aria-expanded', 'false');
+                }
+            });
+            return;
+        }
+        // Close all category dropdowns when clicking outside
+        document.querySelectorAll('.hud-nav__has-children.is-open').forEach(function(li){
+            li.classList.remove('is-open');
+            li.querySelector('.hud-nav__parent-toggle').setAttribute('aria-expanded', 'false');
+        });
+    });
+
+    // ── Priority+ overflow nav ──
     ul.style.flexWrap = 'nowrap';
 
-    // Create the "more" item
-    const moreLi = document.createElement('li');
+    var moreLi = document.createElement('li');
     moreLi.className = 'hud-nav__more';
     moreLi.style.display = 'none';
     moreLi.innerHTML =
@@ -82,21 +127,20 @@
         '<ul class="hud-nav__dropdown"></ul>';
     ul.appendChild(moreLi);
 
-    const toggle = moreLi.querySelector('.hud-nav__more-toggle');
-    const dropdown = moreLi.querySelector('.hud-nav__dropdown');
-    const items = Array.from(ul.children).filter(function(li){ return li !== moreLi; });
+    var toggle = moreLi.querySelector('.hud-nav__more-toggle');
+    var dropdown = moreLi.querySelector('.hud-nav__dropdown');
+    var items = Array.from(ul.children).filter(function(li){ return li !== moreLi; });
 
-    // Cache natural widths (measured once with everything visible)
-    const widths = items.map(function(li){ return li.getBoundingClientRect().width; });
+    var widths = items.map(function(li){ return li.getBoundingClientRect().width; });
     moreLi.style.display = '';
-    const moreWidth = moreLi.getBoundingClientRect().width;
+    var moreWidth = moreLi.getBoundingClientRect().width;
     moreLi.style.display = 'none';
 
-    const gap = 16; // gap-4 = 1rem
+    var gap = 16;
 
     toggle.addEventListener('click', function(e){
         e.stopPropagation();
-        const open = moreLi.classList.toggle('is-open');
+        var open = moreLi.classList.toggle('is-open');
         toggle.setAttribute('aria-expanded', String(open));
     });
 
@@ -107,8 +151,30 @@
         }
     });
 
+    // Flatten a category-with-children <li> into plain dropdown links
+    function flattenChildren(srcLi) {
+        var sub = srcLi.querySelector('.hud-nav__sub');
+        if (!sub) {
+            var clone = srcLi.cloneNode(true);
+            clone.style.display = '';
+            return [clone];
+        }
+        var flatItems = [];
+        var subLinks = sub.querySelectorAll('li');
+        subLinks.forEach(function(child, idx){
+            var li = document.createElement('li');
+            if (idx === 0) {
+                li.innerHTML = child.innerHTML;
+            } else {
+                var a = child.querySelector('a');
+                li.innerHTML = '<a href="' + a.getAttribute('href') + '">- ' + a.textContent + '</a>';
+            }
+            flatItems.push(li);
+        });
+        return flatItems;
+    }
+
     function update() {
-        // Reset all visible
         items.forEach(function(li){ li.style.display = ''; });
         dropdown.innerHTML = '';
         moreLi.style.display = 'none';
@@ -116,7 +182,6 @@
 
         var available = nav.getBoundingClientRect().width;
 
-        // First pass: find where items start to overflow
         var total = 0;
         var breakIdx = -1;
         for (var i = 0; i < items.length; i++) {
@@ -127,9 +192,8 @@
             }
         }
 
-        if (breakIdx === -1) return; // everything fits
+        if (breakIdx === -1) return;
 
-        // Second pass: account for the "more" button
         var limit = available - moreWidth - gap;
         total = 0;
         breakIdx = 0;
@@ -144,9 +208,9 @@
         moreLi.style.display = '';
         for (var i = breakIdx; i < items.length; i++) {
             items[i].style.display = 'none';
-            var clone = items[i].cloneNode(true);
-            clone.style.display = '';
-            dropdown.appendChild(clone);
+            flattenChildren(items[i]).forEach(function(li){
+                dropdown.appendChild(li);
+            });
         }
     }
 

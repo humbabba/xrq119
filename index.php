@@ -38,7 +38,7 @@
                             </div>
                         <?php else : ?>
                             <div class="aspect-video bg-gradient-to-br from-gray-900 via-slate-900 to-cyan-950 flex items-center justify-center">
-                                <span class="font-mono text-cyan-400/50 text-sm">// <?= esc_html( get_the_date( 'Y' ) ); ?></span>
+                                <span class="font-mono text-cyan-400/50 text-sm">// <?= esc_html( the_title() ); ?></span>
                             </div>
                         <?php endif; ?>
                     </a>
