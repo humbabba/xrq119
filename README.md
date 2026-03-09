@@ -265,7 +265,6 @@ CSS keyframe animations used throughout the theme:
 | `pulse-glow` | Fades opacity between 0.4 and 1 |
 | `float` | Gentle vertical bobbing (8px) |
 | `scanline` | Moves a highlight band vertically across an element |
-| `hud-flicker` | Subtle opacity flicker simulating a CRT display |
 
 ---
 
