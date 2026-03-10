@@ -1,6 +1,6 @@
 import { modal } from './modal.js';
 const showModal = () => {
-    const m= modal({ title: 'Sample modal', body: '<p>Here\'s your sample modal. It has many options. See <a class="text-cyan-400 font-bold" href="https://github.com/humbabba/xrq119?tab=readme-ov-file#xrq119" target="_blank">README on the GitHub repo</a> for details.</p>' });
+    const m= modal({ title: 'Sample modal', body: '<p>Here\'s your sample modal. It has many options. See <a class="text-cyan-400 font-bold" href="https://github.com/humbabba/xrq119?tab=readme-ov-file#modal" target="_blank">README on the GitHub repo</a> for details.</p>' });
 };
 
 const init = () => {
