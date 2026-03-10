@@ -11,24 +11,34 @@ Dark HUD header and footer bars, cyan accents, corner brackets, scanline overlay
 ```
 xrq119/
   assets/
-    css/app.css        <- Tailwind source (includes icon system + custom components)
-    fonts/             <- Inter + JetBrains Mono (self-hosted)
-    js/                <- JS source
-      index.js         <- Block JS entry point
-      admin-sortable.js <- Drag-and-drop ordering for admin lists (SortableJS)
-      blocks/          <- Custom block definitions
-      external-link-panel.js
-      card-buttons-panel.js
-  dist/                <- Compiled output (generated)
-    css/app.css        <- Compiled + minified CSS
-    js/                <- Compiled JS
-  functions.php        <- Theme setup, meta registration, block registration, Customizer, drag-and-drop ordering
-  header.php           <- Sticky dark HUD header (logo, nav, priority+ overflow, category dropdowns)
-  footer.php           <- Sticky dark HUD footer (status indicator, copyright)
-  index.php            <- Post/category archive (card grid)
-  single.php           <- Single post (breadcrumbs, pull quote, featured image, body, tags)
-  page.php             <- Single page (renders block content)
-  style.css            <- WP theme header only
+    css/
+      app.css            <- Tailwind source (includes icon system + custom components)
+      cf7.css            <- Contact Form 7 styles (loaded only on CF7 pages)
+    fonts/               <- Inter + JetBrains Mono (self-hosted)
+    js/                  <- JS source
+      app.js             <- Frontend entry (ES module: nav, code rain)
+      admin.js           <- Admin/editor entry (wp-scripts: blocks, sidebar panels)
+      frontend/          <- Frontend modules
+        nav.js           <- Priority+ nav and category dropdown toggles
+        coderain.js      <- Code rain canvas animation
+        modal.js         <- Standalone modal (ES module, import to use)
+        cf7.js           <- Contact Form 7 event hooks (conditionally loaded)
+      admin/             <- Admin modules
+        sortable.js      <- Drag-and-drop ordering (SortableJS)
+        blocks/          <- Custom block definitions
+        external-link-panel.js
+        card-buttons-panel.js
+  dist/                  <- Compiled output (generated)
+    css/app.css          <- Compiled + minified CSS
+    js/                  <- Compiled JS (admin.js, admin-sortable.js)
+  functions.php          <- Theme setup, meta registration, block registration, Customizer, ordering, enqueues
+  header.php             <- Sticky dark HUD header (logo, nav, priority+ overflow, category dropdowns)
+  footer.php             <- Sticky dark HUD footer (status indicator, copyright)
+  index.php              <- Post/category archive (card grid)
+  single.php             <- Single post (breadcrumbs, pull quote, featured image, body, tags)
+  page.php               <- Single page (renders block content with prose typography)
+  style.css              <- WP theme header only
+  webpack.config.js      <- Custom wp-scripts config (admin + admin-sortable entry points)
 ```
 
 ---
@@ -48,29 +58,63 @@ npm install
 | `npm run dev:css` | Watch Tailwind CSS only |
 | `npm run dev:blocks` | Watch block JS only |
 
-`npm run dev` is all you need during development &mdash; it runs both watchers in parallel.
+`npm run dev` is all you need during development; it runs both watchers in parallel.
+
+---
+
+## JavaScript architecture
+
+Frontend and admin JS are organized into separate directories.
+
+### Frontend (`assets/js/frontend/`)
+
+Loaded as ES modules via `wp_enqueue_script_module()`.
+
+- **`app.js`** &mdash; Main entry point, imports and initializes `nav.js` and `coderain.js`. Loaded on every page.
+- **`nav.js`** &mdash; Priority+ navigation overflow and category dropdown toggles.
+- **`coderain.js`** &mdash; Code rain canvas animation for the HUD header screen.
+- **`modal.js`** &mdash; Standalone modal module (see Modal section below).
+- **`cf7.js`** &mdash; Contact Form 7 event hooks. Conditionally loaded only on pages containing a CF7 form.
+
+### Admin (`assets/js/admin/`)
+
+Compiled by `@wordpress/scripts` (webpack) into `dist/js/`.
+
+- **`admin.js`** &mdash; Entry point that imports all block definitions and editor sidebar panels.
+- **`sortable.js`** &mdash; SortableJS-based drag-and-drop for admin list tables (separate entry point).
+- **`blocks/`** &mdash; Custom block `edit` and `save` components.
+- **`external-link-panel.js`** &mdash; Editor sidebar panel for external links.
+- **`card-buttons-panel.js`** &mdash; Editor sidebar panel for card buttons.
 
 ---
 
 ## Header & Footer (HUD bars)
 
-The theme features sticky dark header and footer bars with a subtle scanline overlay and flicker animation.
+The theme features sticky dark header and footer bars with a subtle scanline overlay.
 
 ### Header
 
 The header contains three areas, left-aligned with the screen area pushed to the right:
 
-- **Logo:** Displays the custom logo (Appearance > Customize > Site Identity) or the site nfame as fallback text
+- **Logo:** Displays the custom logo (Appearance > Customize > Site Identity) or the site name as fallback text
 - **Navigation:** By default, lists top-level categories that have posts (excluding Uncategorized) as links, respecting custom drag-and-drop order if set. Categories with child categories display a click-to-toggle dropdown: the first item is "All {Category}" (links to the parent archive), followed by each child. If a custom menu is assigned to the **Header Navigation** location (Appearance > Menus), it replaces the category list entirely. When items overflow the available space, they collapse into a priority+ "more" dropdown with a chevron; categories with children are flattened in this dropdown with `- ` prefixed child items.
-- **Screen area:** By default, shows a "code rain" animation with a scanline effect. Can be replaced with custom HTML via the Customizer (appearance > customize)
+- **Supplemental Navigation:** A second menu location. Items assigned here appear after the main navigation (whether category-based or custom Header Navigation) as part of the same `<ul>`, styled identically and subject to the same priority+ overflow handling. Assign a menu at Appearance > Menus > Supplemental Navigation.
+- **Screen area:** By default, shows a "code rain" animation with a scanline effect. Can be replaced with custom HTML via the Customizer (Appearance > Customize)
 
 ### Footer
 
 The footer contains three items in a row:
 
-- **Status indicator:** By default, a pulsing cyan dot with "sys.online" text. Can be replaced with custom HTML via the Customizer (appearance > customize)
+- **Status indicator:** By default, a pulsing cyan dot with "sys.online" text. Can be replaced with custom HTML via the Customizer (Appearance > Customize)
 - **Copyright:** Year + site name
 - **Theme ID:** "xrq119" (hidden on small screens)
+
+### Menu locations
+
+| Location | Description |
+|---|---|
+| **Header Navigation** | Replaces the default category-based nav entirely |
+| **Supplemental Navigation** | Appended after the main nav (category-based or Header Navigation) |
 
 ### Customizer settings
 
@@ -104,7 +148,7 @@ On the posts list filtered by a category (e.g. **Posts** filtered by a specific 
 Displays posts as cards in a responsive grid (1/2/3 columns). Each card shows:
 
 - **Thumbnail** (or a fallback gradient with the title)
-- **Title**
+- **Title** (mono font, black, not uppercase)
 - **Excerpt** (if set)
 - **Tags** as colored pills
 - **Buttons** (if configured; see Card Buttons below)
@@ -115,16 +159,20 @@ The card image and title are individually clickable links. If External Link is e
 
 Displays an individual post in a centered narrow column (`max-w-2xl`). Layout from top to bottom:
 
-- **Breadcrumbs:** Linked category names separated by `/`, mono font, cyan, uppercase
-- **Title:** Large mono heading
+- **Breadcrumbs:** Hierarchical linked category names (parent > child) separated by `/`, mono font, cyan, uppercase
+- **Title:** Large mono heading (styled via global h1 rule)
 - **Pull quote:** The post excerpt displayed as an italic blockquote with a cyan left border
 - **Featured image:** Full-width with rounded corners and a styled caption (mono, small, cyan left-border accent)
-- **Body:** Full prose styling covering paragraphs, headings (h2&ndash;h4 in mono/cyan/uppercase), links, lists, blockquotes, code blocks (dark background), images, tables, and horizontal rules
+- **Body:** Full prose styling covering paragraphs, headings (h1&ndash;h6 in mono/cyan/uppercase), links, lists, blockquotes, code blocks (dark background), images, tables, and horizontal rules. Custom blocks inside posts are excluded from prose styles and render identically to how they appear on pages.
 - **Tags:** Clickable cyan pills at the bottom, separated by a top border
 
-### `page.php` &mdash; Block content
+### `page.php` &mdash; Pages
 
-Renders any page's block editor content directly. Used for the home page and any other page.
+Renders block editor content directly, full-width. Prose typography (paragraphs, links, lists, blockquotes, code, tables) is applied automatically on non-home pages. Custom blocks are excluded from prose styles. The home page (set as static front page) renders without prose styles.
+
+### Typography
+
+Global heading styles (h1&ndash;h6) apply across all templates except the home page and custom block content. Headings use the mono font, cyan color tones, uppercase, and tracked letter-spacing at descending sizes.
 
 ---
 
@@ -136,11 +184,11 @@ Two custom panels appear in the post editor sidebar under the document settings.
 
 Overrides where a post's card links to in the archive grid.
 
-| Field | Description |
-|---|---|
-| **Link externally?** | Toggle &mdash; enables the feature |
-| **External URL** | The destination URL |
-| **Open in new tab** | Toggle &mdash; adds `target="_blank"` |
+| Field | Description                   |
+|---|-------------------------------|
+| **Link externally?** | Toggle enables the feature    |
+| **External URL** | The destination URL           |
+| **Open in new tab** | Toggle adds `target="_blank"` |
 
 When enabled, the card's image and title link to this URL instead of the post permalink. Visiting the post's own URL will also 301-redirect to the external URL. To bypass the redirect (e.g. for editing or previewing), append `?xrq119` to the post URL.
 
@@ -150,16 +198,27 @@ Add one or more action buttons to a post's card in the archive grid. Click **+ A
 
 Each button has:
 
-| Field | Description |
-|---|---|
-| **Label** | Button text (required &mdash; buttons without a label are skipped) |
-| **URL** | Destination link. If left empty, defaults to the post permalink |
-| **Background** | Color picker with presets (cyan, purple, green, orange, gray) + custom hex |
-| **Text** | Text color picker with presets (white, black, cyan, gray) + custom hex |
+| Field | Description                                                                        |
+|---|------------------------------------------------------------------------------------|
+| **Label** | Button text (required; buttons without a label are skipped)                        |
+| **URL** | Destination link. If left empty, defaults to the post permalink                    |
+| **Background** | Color picker with presets (cyan, purple, green, orange, gray) + custom hex         |
+| **Text** | Text color picker with presets (white, black, cyan, gray) + custom hex             |
 | **CSS class(es)** | Space-separated CSS classes added to the button. Use icon classes here (see below) |
-| **Open in new tab** | Toggle &mdash; adds `target="_blank"` |
+| **Open in new tab** | Toggle adds `target="_blank"`                                                      |
 
 Buttons appear at the bottom of the card, separated by a subtle divider line.
+
+---
+
+## Contact Form 7 integration
+
+The theme includes optional styling and JS hooks for Contact Form 7 (with the Flamingo add-on for database storage).
+
+- **`assets/css/cf7.css`** &mdash; Theme-matched form styles (dark inputs, mono labels, cyan accents, glow on focus, styled validation and success/error messages). Loaded only on pages containing a CF7 shortcode or block.
+- **`assets/js/frontend/cf7.js`** &mdash; Event hooks for CF7 form events (e.g. `wpcf7mailsent`). Loaded as an ES module only on CF7 pages.
+
+No configuration needed. Install Contact Form 7 and Flamingo, create a form, and add it to any page.
 
 ---
 
@@ -224,7 +283,7 @@ icon-github my-custom-class
 
 ## Custom blocks
 
-Five blocks are registered under the `xrq119/` namespace and appear in the **xrq119** block category in the editor.
+Five blocks are registered under the `xrq119/` namespace and appear in the **xrq119** block category in the editor. Each block uses inline styles in its editor component to match the frontend appearance regardless of Tailwind CSS layer specificity.
 
 | Block | Purpose |
 |---|---|
@@ -243,6 +302,7 @@ Custom CSS classes available for use in block markup or templates:
 | Class | Effect |
 |---|---|
 | `corner-accent` | Cyan bracket accents on top-left and bottom-right corners |
+| `card-title` | Mono font card heading (black, no uppercase) |
 | `hover-glow` | Glow effect on hover (used on cards) |
 | `hero-section` | Orb + scanline overlay for hero areas |
 | `grid-bg` | Subtle cyan grid background pattern |
@@ -265,6 +325,48 @@ CSS keyframe animations used throughout the theme:
 | `pulse-glow` | Fades opacity between 0.4 and 1 |
 | `float` | Gentle vertical bobbing (8px) |
 | `scanline` | Moves a highlight band vertically across an element |
+
+---
+
+## Modal
+
+A standalone ES module for displaying theme-styled modals. Import it from any frontend script:
+
+```js
+import { modal } from './frontend/modal.js';
+
+const m = modal({
+    title: 'System alert',
+    body: '<p>Transmission received.</p>',
+});
+```
+
+### Options
+
+All options are optional.
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `title` | string | `''` | Heading text |
+| `body` | string / HTMLElement | `''` | HTML string or DOM element for the modal body |
+| `closeLabel` | string | `'Close'` | Text for the footer close button |
+| `showClose` | boolean | `true` | Show the &times; button and footer close button |
+| `overlayClose` | boolean | `true` | Close when clicking the backdrop |
+| `escClose` | boolean | `true` | Close on Escape key |
+| `width` | string | `'32rem'` | Max width (any CSS value) |
+| `onOpen` | function | `null` | Called after the modal opens, receives the API object |
+| `onClose` | function | `null` | Called after the modal is removed from the DOM |
+
+### Return value
+
+`modal()` returns an API object:
+
+| Property | Description |
+|---|---|
+| `close()` | Programmatically close the modal |
+| `panel` | The modal panel DOM element |
+| `body` | The body content DOM element |
+| `overlay` | The backdrop DOM element |
 
 ---
 

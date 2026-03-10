@@ -9,6 +9,12 @@ add_action( 'wp_enqueue_scripts', function () {
         [],
         filemtime( get_template_directory() . '/dist/css/app.css' )
     );
+    wp_enqueue_script_module(
+        'xrq119-app',
+        get_template_directory_uri() . '/assets/js/app.js',
+        [],
+        filemtime( get_template_directory() . '/assets/js/app.js' )
+    );
 } );
 
 add_action( 'wp_enqueue_scripts', function () {
@@ -16,14 +22,26 @@ add_action( 'wp_enqueue_scripts', function () {
         return;
     }
     global $post;
-    if ( $post && has_shortcode( $post->post_content, 'contact-form-7' ) ) {
-        wp_enqueue_style(
-            'xrq119-cf7',
-            get_template_directory_uri() . '/assets/css/cf7.css',
-            [ 'contact-form-7' ],
-            filemtime( get_template_directory() . '/assets/css/cf7.css' )
-        );
+    if ( ! $post ) {
+        return;
     }
+    $has_cf7 = has_shortcode( $post->post_content, 'contact-form-7' )
+            || has_block( 'contact-form-7/contact-form-selector', $post );
+    if ( ! $has_cf7 ) {
+        return;
+    }
+    wp_enqueue_style(
+        'xrq119-cf7',
+        get_template_directory_uri() . '/assets/css/cf7.css',
+        [ 'contact-form-7' ],
+        filemtime( get_template_directory() . '/assets/css/cf7.css' )
+    );
+    wp_enqueue_script_module(
+        'xrq119-cf7',
+        get_template_directory_uri() . '/assets/js/frontend/cf7.js',
+        [],
+        filemtime( get_template_directory() . '/assets/js/frontend/cf7.js' )
+    );
 }, 20 );
 
 add_action( 'after_setup_theme', function () {
@@ -37,7 +55,10 @@ add_action( 'after_setup_theme', function () {
         'flex-width'  => true,
     ] );
     add_editor_style( 'dist/css/app.css' );
-    register_nav_menus( [ 'header' => 'Header Navigation' ] );
+    register_nav_menus( [
+        'header'       => 'Header Navigation',
+        'supplemental' => 'Supplemental Navigation',
+    ] );
 } );
 
 /* ── Customizer: HUD settings ── */
@@ -396,13 +417,13 @@ add_action( 'admin_notices', function () {
 /* ── Blocks ── */
 
 add_action( 'init', function () {
-    if ( ! file_exists( get_template_directory() . '/dist/js/index.asset.php' ) ) {
+    if ( ! file_exists( get_template_directory() . '/dist/js/admin.asset.php' ) ) {
         return;
     }
-    $asset = include get_template_directory() . '/dist/js/index.asset.php';
+    $asset = include get_template_directory() . '/dist/js/admin.asset.php';
     wp_register_script(
         'xrq119-blocks',
-        get_template_directory_uri() . '/dist/js/index.js',
+        get_template_directory_uri() . '/dist/js/admin.js',
         $asset['dependencies'],
         $asset['version']
     );
