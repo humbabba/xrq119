@@ -4,7 +4,7 @@ const showModal = () => {
 };
 
 const init = () => {
-    const links = document.querySelector('.show-modal-link');
+    const links = document.querySelectorAll('.show-modal-link');
     links.forEach((el) => {
         el.addEventListener('click', () => {
            showModal();
